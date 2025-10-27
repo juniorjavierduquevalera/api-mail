@@ -4,10 +4,12 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export const sendMail = async (req, res) => {
-  const { name, email, message } = req.body;
+  const { name, lastName, email, message } = req.body;
 
-  if (!name || !email || !message) {
-    return res.status(400).json({ message: "Faltan datos: nombre, email o mensaje." });
+  if (!name || !lastName || !email || !message) {
+    return res
+      .status(400)
+      .json({ message: "Faltan datos: nombre, apellido, email o mensaje." });
   }
 
   try {
@@ -20,13 +22,14 @@ export const sendMail = async (req, res) => {
     });
 
     const mailOptions = {
-      from: `"${name}" <${email}>`,
+      from: `"${name} ${lastName}" <${email}>`,
       to: process.env.CONTACT_TO,
-      subject: `📬 Nuevo lead campaña ${name}`,
+      subject: `📬 Nuevo lead campaña ${name} ${lastName}`,
       text: `
 Has recibido un nuevo mensaje desde el formulario de contacto.
 
 👤 Nombre: ${name}
+👤 Apellido: ${lastName}
 📧 Email: ${email}
 
 💬 Mensaje:
